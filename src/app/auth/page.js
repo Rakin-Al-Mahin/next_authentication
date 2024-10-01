@@ -3,7 +3,6 @@
 /* eslint-disable no-unused-vars */
 
 import { useState, useEffect } from "react";
-// import "../auth/auth.css";
 import Image from "next/image";
 import SignInForm from "@/components/SignInForm";
 import SignUpForm from "@/components/SignUpForm";
@@ -40,8 +39,8 @@ const AuthForm = () => {
     }
   }, [isSignUp]);
 
-  const domain = "http://localhost:5000";
-  //   const domain = "https://pengooin-testing-by-rakin-v1.vercel.app";
+  //   const domain = "http://localhost:5000";
+  const domain = "https://pengooin-testing-by-rakin-v1.vercel.app";
 
   const fetchZones = async () => {
     try {
@@ -137,8 +136,8 @@ const AuthForm = () => {
 
   const handleGoogleSignInUp = () => {
     window.location.href =
-      "https://pengooin-testing-by-rakin-v1.vercel.app/api/auth/google";
-    //   `${domain}/api/auth/google`;
+      //   "https://pengooin-testing-by-rakin-v1.vercel.app/api/auth/google";
+      `${domain}/api/auth/google`;
   };
 
   return (
