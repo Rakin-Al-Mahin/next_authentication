@@ -12,9 +12,10 @@ export default function ForgotPasswordForm({
       </h3>
 
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-700">Email</label>
+        {/* <label className="block text-sm font-medium text-gray-700">Email</label> */}
         <input
           type="email"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required

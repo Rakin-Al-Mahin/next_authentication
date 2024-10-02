@@ -1,14 +1,15 @@
+"use client";
+
 /* eslint-disable react/prop-types */
+
+import { useState } from "react";
 
 export default function ResetPasswordForm({
   newPassword,
   setNewPassword,
   handleResetPasswordSubmit,
 }) {
-  const togglePasswordVisibility = (e) => {
-    const passwordField = document.getElementById("password");
-    passwordField.type = e.target.checked ? "text" : "password";
-  };
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <form onSubmit={handleResetPasswordSubmit} className="space-y-6">
@@ -17,29 +18,30 @@ export default function ResetPasswordForm({
       </h3>
 
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-700">
-          Password
-        </label>
+        {/* <label className="block text-sm font-medium text-gray-700">
+          New Password
+        </label> */}
         <input
-          id="password"
-          type="password"
+          type={showPassword ? "text" : "password"}
+          placeholder="New Password"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
           required
           className="w-full p-2 border text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+        <p className="text-sm text-blue-600">
+          * Password must be at least 6 characters long.
+        </p>
       </div>
 
       <div className="flex items-center space-x-2">
         <input
           type="checkbox"
-          id="show-password"
-          onChange={togglePasswordVisibility}
+          checked={showPassword}
+          onChange={() => setShowPassword(!showPassword)}
           className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
         />
-        <label htmlFor="show-password" className="text-sm text-gray-700">
-          Show Password
-        </label>
+        <label className="text-sm text-gray-700">Show Password</label>
       </div>
 
       <button

@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+// import { useRouter } from "next/router";
 import SignInForm from "@/components/SignInForm";
 import SignUpForm from "@/components/SignUpForm";
 import ForgotPasswordForm from "@/components/ForgotPasswordForm";
@@ -11,18 +12,21 @@ import ResetPasswordForm from "@/components/ResetPasswordForm";
 import google_logo from "../../../public/images/google-logo.png";
 import getZone from "@/lib/getZone";
 
-const AuthForm = () => {
+export default function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [zone, setZone] = useState("");
   const [zones, setZones] = useState([]);
   const [error, setError] = useState(null);
+  const [zoneError, setZoneError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isResetPassword, setIsResetPassword] = useState(false);
   const [resetToken, setResetToken] = useState("");
   const [newPassword, setNewPassword] = useState("");
+
+  // const router = useRouter();
 
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
@@ -50,13 +54,16 @@ const AuthForm = () => {
       } else {
         throw new Error("Invalid data format");
       }
-    } catch (err) {
-      setError("Failed to load zones");
+    } catch (zoneError) {
+      setZoneError("Failed to load zones");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+    setSuccessMessage(null);
+
     try {
       const url = isSignUp ? "/api/auth/register" : "/api/auth/login";
       const payload = JSON.stringify(
@@ -76,7 +83,11 @@ const AuthForm = () => {
           ? setSuccessMessage("Sign up successful")
           : setSuccessMessage("Sign in successful");
       } else {
-        setError("Failed to authenticate. Please try again.");
+        {
+          isSignUp
+            ? setError("Failed to authenticate. Please try again.")
+            : setError("Incorrect email or password. Please try again.");
+        }
       }
     } catch (error) {
       console.error("Authentication error", error);
@@ -86,6 +97,9 @@ const AuthForm = () => {
 
   const handleForgotPasswordSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+    setSuccessMessage(null);
+
     try {
       const response = await fetch(`${domain}/api/auth/forgot`, {
         method: "POST",
@@ -107,6 +121,9 @@ const AuthForm = () => {
 
   const handleResetPasswordSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+    setSuccessMessage(null);
+
     try {
       const response = await fetch(`${domain}/api/auth/reset/${resetToken}`, {
         method: "POST",
@@ -118,9 +135,15 @@ const AuthForm = () => {
 
       if (response.ok) {
         setSuccessMessage("Password reset successful. You can now sign in.");
-        setIsResetPassword(false);
+        // setIsResetPassword(false);
         setEmail("");
         setPassword("");
+        // Redirect to external site after 2 seconds
+        setTimeout(() => {
+          window.location.href =
+            // router.push =
+            "https://next-authentication-tau.vercel.app/auth";
+        }, 2000);
       } else {
         setError("Failed to reset password.");
       }
@@ -132,6 +155,7 @@ const AuthForm = () => {
 
   const handleForgotPassword = () => {
     setIsForgotPassword(true);
+    // setEmail("");
   };
 
   const handleGoogleSignInUp = () => {
@@ -151,6 +175,9 @@ const AuthForm = () => {
                   setIsSignUp(false);
                   setIsForgotPassword(false);
                   setSuccessMessage(null);
+                  setError(null);
+                  setEmail("");
+                  setPassword("");
                 }}
                 className={`px-4 py-2 font-semibold rounded hover:bg-blue-600 ${
                   !isSignUp ? "bg-blue-500 text-white" : "text-gray-500"
@@ -163,6 +190,10 @@ const AuthForm = () => {
                   setIsSignUp(true);
                   setIsForgotPassword(false);
                   setSuccessMessage(null);
+                  setError(null);
+                  setEmail("");
+                  setPassword("");
+                  setZone("");
                 }}
                 className={`px-4 py-2 font-semibold rounded hover:bg-blue-600 ${
                   isSignUp ? "bg-blue-500 text-white" : "text-gray-500"
@@ -180,16 +211,18 @@ const AuthForm = () => {
           </div>
         )}
 
+        {error && (
+          <div className="mb-4 text-red-600 text-center">
+            <p>{error}</p>
+          </div>
+        )}
+
         {isResetPassword ? (
-          successMessage ? (
-            <div className="text-center text-green-600">{successMessage}</div>
-          ) : (
-            <ResetPasswordForm
-              newPassword={newPassword}
-              setNewPassword={setNewPassword}
-              handleResetPasswordSubmit={handleResetPasswordSubmit}
-            />
-          )
+          <ResetPasswordForm
+            newPassword={newPassword}
+            setNewPassword={setNewPassword}
+            handleResetPasswordSubmit={handleResetPasswordSubmit}
+          />
         ) : isForgotPassword ? (
           <ForgotPasswordForm
             email={email}
@@ -207,7 +240,7 @@ const AuthForm = () => {
               setZone={setZone}
               zones={zones}
               handleSubmit={handleSubmit}
-              error={error}
+              error={zoneError}
             />
             <div className="flex items-center justify-center mt-4">
               <button
@@ -218,8 +251,8 @@ const AuthForm = () => {
                 <Image
                   src={google_logo}
                   alt="Google-logo"
-                  width={20}
-                  height={20}
+                  width={25}
+                  height={25}
                 />
                 <span className="ml-2">Sign up with Google</span>
               </button>
@@ -244,8 +277,8 @@ const AuthForm = () => {
                 <Image
                   src={google_logo}
                   alt="Google-logo"
-                  width={20}
-                  height={20}
+                  width={25}
+                  height={25}
                 />
                 <span className="ml-2">Sign in with Google</span>
               </button>
@@ -255,6 +288,4 @@ const AuthForm = () => {
       </div>
     </div>
   );
-};
-
-export default AuthForm;
+}
