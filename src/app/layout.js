@@ -19,7 +19,10 @@ export default function RootLayout({ children }) {
               <Link href="/">Home</Link>
             </li>
             <li>
-              <Link href="/auth">Sign in</Link>
+              <Link href="/auth">Sign In</Link>
+            </li>
+            <li>
+              <Link href="/dashboard">Dashboard</Link>
             </li>
           </ul>
         </nav>
