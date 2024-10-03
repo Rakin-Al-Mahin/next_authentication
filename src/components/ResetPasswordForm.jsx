@@ -12,7 +12,7 @@ export default function ResetPasswordForm({
   handleResetPasswordBlur,
   handleResetPasswordChange,
 }) {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
   return (
     <form onSubmit={handleResetPasswordSubmit} className="space-y-6">
@@ -25,7 +25,7 @@ export default function ResetPasswordForm({
           New Password
         </label> */}
         <input
-          type={showPassword ? "text" : "password"}
+          type={showNewPassword ? "text" : "password"}
           placeholder="New Password"
           value={newPassword}
           onChange={handleResetPasswordChange}
@@ -33,14 +33,16 @@ export default function ResetPasswordForm({
           required
           className="w-full p-2 border text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <p className="text-sm text-red-600">{passwordError}</p>
+        {passwordError && (
+          <p className="text-sm text-red-600">{passwordError}</p>
+        )}
       </div>
 
       <div className="flex items-center space-x-2">
         <input
           type="checkbox"
-          checked={showPassword}
-          onChange={() => setShowPassword(!showPassword)}
+          checked={showNewPassword}
+          onChange={() => setShowNewPassword(!showNewPassword)}
           className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
         />
         <label className="text-sm text-gray-700">Show Password</label>

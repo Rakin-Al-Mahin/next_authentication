@@ -18,8 +18,13 @@ export default function SignUpForm({
   handlePasswordBlur,
   passwordError,
   handlePasswordChange,
+  confirmPassword,
+  handleConfirmPasswordChange,
+  handleConfirmPasswordBlur,
+  confirmPasswordError,
 }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -50,7 +55,9 @@ export default function SignUpForm({
           required
           className="w-full p-2 border text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <p className="text-sm text-red-600">{passwordError}</p>
+        {passwordError && (
+          <p className="text-sm text-red-600">{passwordError}</p>
+        )}
       </div>
 
       <div className="flex items-center space-x-2">
@@ -61,6 +68,34 @@ export default function SignUpForm({
           className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
         />
         <label className="text-sm text-gray-700">Show Password</label>
+      </div>
+
+      <div className="space-y-2">
+        {/* <label className="block text-sm font-medium text-gray-700">
+          Confirm Password
+        </label> */}
+        <input
+          type={showConfirmPassword ? "text" : "password"}
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={handleConfirmPasswordChange}
+          onBlur={handleConfirmPasswordBlur}
+          required
+          className="w-full p-2 border text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        {confirmPasswordError && (
+          <p className="text-sm text-red-600">{confirmPasswordError}</p>
+        )}
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <input
+          type="checkbox"
+          checked={showConfirmPassword}
+          onChange={() => setShowConfirmPassword(!showConfirmPassword)}
+          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+        />
+        <label className="text-sm text-gray-700">Show Confirm Password</label>
       </div>
 
       <div className="space-y-2">

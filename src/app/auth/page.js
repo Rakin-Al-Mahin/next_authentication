@@ -16,11 +16,13 @@ export default function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [zone, setZone] = useState("");
   const [zones, setZones] = useState([]);
   const [error, setError] = useState(null);
   const [zoneError, setZoneError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [successMessage, setSuccessMessage] = useState(null);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isResetPassword, setIsResetPassword] = useState(false);
@@ -79,6 +81,27 @@ export default function AuthForm() {
     }
   };
 
+  // For Confirm Password
+
+  // Validate confirm password on blur
+  const handleConfirmPasswordBlur = () => {
+    if (password && confirmPassword && password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match.");
+    } else {
+      setConfirmPasswordError(""); // Clear error if passwords match
+    }
+  };
+
+  // Clear confirm password error when user types
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value);
+    if (e.target.value === password) {
+      setConfirmPasswordError("");
+    } else {
+      setConfirmPasswordError("Passwords do not match.");
+    }
+  };
+
   // For Reset Password
 
   // Validate password when user leaves the password field
@@ -102,6 +125,16 @@ export default function AuthForm() {
     e.preventDefault();
     setError(null);
     setSuccessMessage(null);
+
+    // Validate passwords before submission
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match.");
+      return;
+    }
 
     try {
       const url = isSignUp ? "/api/auth/register" : "/api/auth/login";
@@ -205,7 +238,7 @@ export default function AuthForm() {
 
   return (
     <div className="flex items-center justify-center bg-black-100">
-      <div className="w-full max-w-md px-8 py-6 bg-white shadow-md rounded-lg mt-20">
+      <div className="w-full max-w-md px-8 py-6 bg-white shadow-md rounded-lg mt-10">
         <div className="flex justify-around mb-6">
           {!isResetPassword && (
             <>
@@ -287,6 +320,10 @@ export default function AuthForm() {
               passwordError={passwordError}
               handlePasswordBlur={handlePasswordBlur}
               handlePasswordChange={handlePasswordChange}
+              confirmPassword={confirmPassword}
+              handleConfirmPasswordChange={handleConfirmPasswordChange}
+              handleConfirmPasswordBlur={handleConfirmPasswordBlur}
+              confirmPasswordError={confirmPasswordError}
             />
             <div className="flex items-center justify-center mt-4">
               <button
