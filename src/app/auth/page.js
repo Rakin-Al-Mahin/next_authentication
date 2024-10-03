@@ -20,6 +20,7 @@ export default function AuthForm() {
   const [zones, setZones] = useState([]);
   const [error, setError] = useState(null);
   const [zoneError, setZoneError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isResetPassword, setIsResetPassword] = useState(false);
@@ -59,6 +60,44 @@ export default function AuthForm() {
     }
   };
 
+  // For Sign up
+
+  // Validate password when user leaves the password field
+  const handlePasswordBlur = () => {
+    if (password && password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long.");
+    } else {
+      setPasswordError("");
+    }
+  };
+
+  // Clear error as soon as user starts typing again
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (passwordError && e.target.value.length >= 6) {
+      setPasswordError(""); // Clear the error if the user types a valid password
+    }
+  };
+
+  // For Reset Password
+
+  // Validate password when user leaves the password field
+  const handleResetPasswordBlur = () => {
+    if (newPassword && newPassword.length < 6) {
+      setPasswordError("Password must be at least 6 characters long.");
+    } else {
+      setPasswordError("");
+    }
+  };
+
+  // Clear error as soon as user starts typing again
+  const handleResetPasswordChange = (e) => {
+    setNewPassword(e.target.value);
+    if (passwordError && e.target.value.length >= 6) {
+      setPasswordError(""); // Clear the error if the user types a valid password
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -82,12 +121,12 @@ export default function AuthForm() {
         isSignUp
           ? setSuccessMessage("Sign up successful")
           : setSuccessMessage("Sign in successful");
+      } else if (response.status === 409) {
+        setError("Email already exists.");
       } else {
-        {
-          isSignUp
-            ? setError("Failed to authenticate. Please try again.")
-            : setError("Incorrect email or password. Please try again.");
-        }
+        isSignUp
+          ? setError("Failed to authenticate. Please try again.")
+          : setError("Incorrect email or password. Please try again.");
       }
     } catch (error) {
       console.error("Authentication error", error);
@@ -222,6 +261,9 @@ export default function AuthForm() {
             newPassword={newPassword}
             setNewPassword={setNewPassword}
             handleResetPasswordSubmit={handleResetPasswordSubmit}
+            passwordError={passwordError}
+            handleResetPasswordBlur={handleResetPasswordBlur}
+            handleResetPasswordChange={handleResetPasswordChange}
           />
         ) : isForgotPassword ? (
           <ForgotPasswordForm
@@ -240,7 +282,11 @@ export default function AuthForm() {
               setZone={setZone}
               zones={zones}
               handleSubmit={handleSubmit}
-              error={zoneError}
+              error={error}
+              zoneError={zoneError}
+              passwordError={passwordError}
+              handlePasswordBlur={handlePasswordBlur}
+              handlePasswordChange={handlePasswordChange}
             />
             <div className="flex items-center justify-center mt-4">
               <button

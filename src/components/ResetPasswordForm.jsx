@@ -8,6 +8,9 @@ export default function ResetPasswordForm({
   newPassword,
   setNewPassword,
   handleResetPasswordSubmit,
+  passwordError,
+  handleResetPasswordBlur,
+  handleResetPasswordChange,
 }) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -25,13 +28,12 @@ export default function ResetPasswordForm({
           type={showPassword ? "text" : "password"}
           placeholder="New Password"
           value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
+          onChange={handleResetPasswordChange}
+          onBlur={handleResetPasswordBlur}
           required
           className="w-full p-2 border text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <p className="text-sm text-blue-600">
-          * Password must be at least 6 characters long.
-        </p>
+        <p className="text-sm text-red-600">{passwordError}</p>
       </div>
 
       <div className="flex items-center space-x-2">

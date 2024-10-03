@@ -14,6 +14,10 @@ export default function SignUpForm({
   zones,
   handleSubmit,
   error,
+  zoneError,
+  handlePasswordBlur,
+  passwordError,
+  handlePasswordChange,
 }) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -41,13 +45,12 @@ export default function SignUpForm({
           type={showPassword ? "text" : "password"}
           placeholder="Password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={handlePasswordChange}
+          onBlur={handlePasswordBlur}
           required
           className="w-full p-2 border text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <p className="text-sm text-blue-600">
-          * Password must be at least 6 characters long.
-        </p>
+        <p className="text-sm text-red-600">{passwordError}</p>
       </div>
 
       <div className="flex items-center space-x-2">
@@ -62,8 +65,8 @@ export default function SignUpForm({
 
       <div className="space-y-2">
         {/* <label className="block text-sm font-medium text-gray-700">Zone</label> */}
-        {error ? (
-          <p className="text-sm text-red-600">{error}</p>
+        {zoneError ? (
+          <p className="text-sm text-red-600">{zoneError}</p>
         ) : (
           <select
             value={zone}
