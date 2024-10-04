@@ -10,7 +10,6 @@ import SignUpForm from "@/components/SignUpForm";
 import ForgotPasswordForm from "@/components/ForgotPasswordForm";
 import ResetPasswordForm from "@/components/ResetPasswordForm";
 import google_logo from "../../../public/images/google-logo.png";
-// import getZone from "@/lib/getZone";
 
 export default function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(false);
