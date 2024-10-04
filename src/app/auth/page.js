@@ -51,7 +51,8 @@ export default function AuthForm() {
 
   const fetchZones = async () => {
     try {
-      const result = await fetch(`${domain}/api/zone/get-all-zone`);
+      const response = await fetch(`${domain}/api/zone/get-all-zone`);
+      const result = await response.json();
       if (Array.isArray(result.data)) {
         setZones(result.data);
       } else {
