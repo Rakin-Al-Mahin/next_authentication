@@ -127,16 +127,6 @@ export default function AuthForm() {
     setError(null);
     setSuccessMessage(null);
 
-    // // Validate passwords before submission
-    // if (password.length < 6) {
-    //   setPasswordError("Password must be at least 6 characters long.");
-    //   return;
-    // }
-    // if (password !== confirmPassword) {
-    //   setConfirmPasswordError("Passwords do not match.");
-    //   return;
-    // }
-
     try {
       const url = isSignUp ? "/api/auth/register" : "/api/auth/login";
       const payload = JSON.stringify(
