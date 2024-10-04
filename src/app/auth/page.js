@@ -217,6 +217,8 @@ export default function AuthForm() {
   };
 
   const handleForgotPassword = () => {
+    setError(null);
+    setSuccessMessage(null);
     setIsForgotPassword(true);
     // setEmail("");
   };
