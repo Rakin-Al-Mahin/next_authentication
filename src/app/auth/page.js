@@ -10,7 +10,7 @@ import SignUpForm from "@/components/SignUpForm";
 import ForgotPasswordForm from "@/components/ForgotPasswordForm";
 import ResetPasswordForm from "@/components/ResetPasswordForm";
 import google_logo from "../../../public/images/google-logo.png";
-import getZone from "@/lib/getZone";
+// import getZone from "@/lib/getZone";
 
 export default function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -51,7 +51,7 @@ export default function AuthForm() {
 
   const fetchZones = async () => {
     try {
-      const result = await getZone();
+      const result = await fetch(`${domain}/api/zone/get-all-zone`);
       if (Array.isArray(result.data)) {
         setZones(result.data);
       } else {
